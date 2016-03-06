@@ -51,7 +51,7 @@ public class PublicationListingProcess1 extends Publication {
 		boolean fileExists = false;
 		
 		File f = null;
-		File originalPublication = new File("PublicationData_Input");
+		File originalPublication = new File("PublicationData_Input.txt");
 		PrintWriter pw = null;
 		FileOutputStream outStream = null;
 		FileInputStream inStream = null;
@@ -83,7 +83,7 @@ public class PublicationListingProcess1 extends Publication {
 			
 			try {
 				fileIn = new Scanner(new FileReader(originalPublication));
-//				printFileItems(originalPublication);
+				printFileItems(originalPublication);
 			} catch (FileNotFoundException e) {
 				System.out.println("File not found, closing program");
 				e.printStackTrace();
@@ -94,19 +94,30 @@ public class PublicationListingProcess1 extends Publication {
 			}
 
 		}
+	
 	}
 	
-//	public static void printFileItems(File inputFile) throws IOException {
-//		Scanner input = new Scanner(new BufferedReader(inputFile));
-//		int x = 0;
-//		while ((x = input.read()) != -1) {
-//			System.out.print((((BufferedReader) input)).readLine());
-//		}
-//	}
+	
+	public static void printFileItems(File aFile) {
+		BufferedReader br;
+		try {
+			br = new BufferedReader(new FileReader(aFile));
+			String line;
+			System.out.println();
+			while ((line = br.readLine()) != null) {
+				System.out.println(line);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public static void correctListOfItems(File inFile, File outFile) throws FileNotFoundException, IOException {
 		Reader input = new FileReader(inFile);
-		PrintWriter output = new PrintWriter(outFile);	
+		PrintWriter output = new PrintWriter(outFile);
+		for (int x: )
 	}
 	
 	public static int numberOfItems(String Filename) throws IOException {
@@ -120,7 +131,6 @@ public class PublicationListingProcess1 extends Publication {
 		in.close();
 		return count;
 	}
-	
 	
 }
 	
