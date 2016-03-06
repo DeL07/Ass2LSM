@@ -13,9 +13,14 @@
 import java.nio.*;
 import java.io.*;
 import java.util.*;
-import java.util.Scanner;
 
 public class PublicationListingProcess1 extends Publication {
+	
+	// added constructor because class extends publication, will get error if constructor isn't there - M
+	
+	public PublicationListingProcess1(long code, String name, int year, String author, double cost, int pages){
+		super(code, name, year, author, cost, pages);
+	}
 	
 	//private static PublicationArray[] = new Publication[];
 	enum PublicationTypes {
