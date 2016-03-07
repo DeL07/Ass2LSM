@@ -15,18 +15,20 @@ import java.nio.*;
 import java.io.*;
 import java.util.*;
 
+import javax.swing.plaf.synth.SynthSpinnerUI;
+
 public class PublicationListingProcess1 {
 
 	// added constructor because class extends publication, will get error if
 	// constructor isn't there - M
-	
+
 	public PublicationListingProcess1() {
-		
+
 	}
-	
+
 	public static Publication[] array;
 	public static int arrayPosition = 0;
-	
+
 	// private static PublicationArray[] = new Publication[];
 	enum PublicationTypes {
 		PUBLICATIONCODE, PUBLICATIONNAME, PUBLICATIONYEAR, PUBLICATIONAUTHORNAME, PUBLICATIONCOST, PUBLICATIONNBPAGES
@@ -124,10 +126,11 @@ public class PublicationListingProcess1 {
 	public static void correctListOfItems(File inFile, String outFile) throws FileNotFoundException, IOException {
 		BufferedReader br = new BufferedReader(new FileReader(inFile));
 		PrintWriter output = new PrintWriter(outFile);
-		
+		Scanner kb = new Scanner(System.in);
+
 		try {
 			String line = "";
-		
+
 			while ((line = br.readLine()) != null) {
 
 				// PublicationListingProcess1(long code, String name, int year,
@@ -136,19 +139,38 @@ public class PublicationListingProcess1 {
 
 				String[] tokens = line.split(" ");
 
-				Publication pub1 = new Publication(Long.parseLong(tokens[0]), tokens[1],
-						Integer.parseInt(tokens[2]), tokens[3], Double.parseDouble(tokens[4]),
-						Integer.parseInt(tokens[5]));
-				
+				Publication pub1 = new Publication(Long.parseLong(tokens[0]), tokens[1], Integer.parseInt(tokens[2]),
+						tokens[3], Double.parseDouble(tokens[4]), Integer.parseInt(tokens[5]));
+
 				array[arrayPosition++] = pub1;
-	
+
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
+
+		for (int i = 0; i < array.length; i++) {
+			long tempCheck;
+			int copyCount = 0;
+			tempCheck = array[i].getPublication_code();
+			for (int j = 0; j < array.length; j++) {
+				if (array[j].getPublication_code() == tempCheck & j != i) {
+					System.out.println("Error: Duplicate Publication Code found!");
+					System.out.print("Please enter a new Publication Code: ");
+					boolean newCodeCheck = true;
+					while (newCodeCheck) {
+						long newCode = kb.nextLong();
+						for (int l = 0; l < array.length; l++) {
+							
+						}
+						array[j].setPublication_code(newCode);	
+					}
+					
+				}
+			}
+		}
+	}
 
 	}
 
