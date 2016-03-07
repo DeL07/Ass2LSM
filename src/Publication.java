@@ -8,6 +8,8 @@ public class Publication {
 	private double publication_cost;
 	private int publication_nbpages;
 	
+	
+	
 	public Publication(long code, String name, int year, String author, double cost, int pages) {
 		publication_code = code;
 		publication_name = name;
