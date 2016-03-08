@@ -15,8 +15,6 @@ import java.nio.*;
 import java.io.*;
 import java.util.*;
 
-import javax.swing.plaf.synth.SynthSpinnerUI;
-
 public class PublicationListingProcess1 {
 
 	// added constructor because class extends publication, will get error if
@@ -28,6 +26,7 @@ public class PublicationListingProcess1 {
 
 	public static Publication[] array;
 	public static int arrayPosition = 0;
+	public static int numberOfItems;
 
 	// private static PublicationArray[] = new Publication[];
 	enum PublicationTypes {
@@ -70,7 +69,7 @@ public class PublicationListingProcess1 {
 					System.out.println("That file already has a size of " + f.length() + " bytes.");
 				} else {
 					f.createNewFile();
-					System.out.println("File created: " + outputFileName + ".txt");
+					System.out.println("File created: " + outputFileName + ".txt\n");
 					outputFileCheck = true;
 				}
 			} catch (IOException e) {
@@ -81,11 +80,10 @@ public class PublicationListingProcess1 {
 
 			try {
 				fileIn = new Scanner(new FileReader(originalPublication));
-				printFileItems(originalPublication);
+				//printFileItems(originalPublication);
 			} catch (FileNotFoundException e) {
 				System.out.println("File not found, closing program");
 				e.printStackTrace();
-
 				System.exit(0);
 			} finally {
 				fileIn.close();
@@ -94,19 +92,22 @@ public class PublicationListingProcess1 {
 		}
 
 		// Check number of items
-		int items = numberOfItems(originalPublication);
-
-		if (items == 0 || items == 1) {
+		numberOfItems = numberOfItems(originalPublication);
+		if (numberOfItems <= 1) {
 			System.out.println("Input file is empty or only has one record");
 			System.out.println("Closing file and exiting program");
 			System.exit(0);
 		} else {
-			array = new Publication[items];
+			array = new Publication[numberOfItems];
 			correctListOfItems(originalPublication, outputFileName);
 		}
 
+		printFileItems(originalPublication);
+		System.out.println();
+		printFileItems(f);
 	}
 
+	// Print items from file method
 	public static void printFileItems(File aFile) {
 		BufferedReader br;
 		try {
@@ -123,57 +124,69 @@ public class PublicationListingProcess1 {
 		}
 	}
 
+	// Correct Publication Code method
 	public static void correctListOfItems(File inFile, String outFile) throws FileNotFoundException, IOException {
 		BufferedReader br = new BufferedReader(new FileReader(inFile));
-		PrintWriter output = new PrintWriter(outFile);
 		Scanner kb = new Scanner(System.in);
 
 		try {
 			String line = "";
-
-			while ((line = br.readLine()) != null) {
-
-				// PublicationListingProcess1(long code, String name, int year,
-				// String author, double cost, int pages){
-				// super(code, name, year, author, cost, pages);
-
-				String[] tokens = line.split(" ");
-
-				Publication pub1 = new Publication(Long.parseLong(tokens[0]), tokens[1], Integer.parseInt(tokens[2]),
+			int split = 0;
+			while ((line = br.readLine()) != null) {				
+									
+					String[] tokens = line.split(" ");
+					Publication pub1 = new Publication(Long.parseLong(tokens[0]), tokens[1], Integer.parseInt(tokens[2]),
 						tokens[3], Double.parseDouble(tokens[4]), Integer.parseInt(tokens[5]));
-
-				array[arrayPosition++] = pub1;
-
+					array[arrayPosition++] = pub1;
+					System.out.println("Added item #" + arrayPosition + ":\t" + array[arrayPosition-1].toString());
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			//e.printStackTrace();
 		}
-
+			
 		for (int i = 0; i < array.length; i++) {
 			long tempCheck;
-			int copyCount = 0;
 			tempCheck = array[i].getPublication_code();
 			for (int j = 0; j < array.length; j++) {
 				if (array[j].getPublication_code() == tempCheck & j != i) {
-					System.out.println("Error: Duplicate Publication Code found!");
-					System.out.print("Please enter a new Publication Code: ");
+					System.out.println("\nError: Duplicate Publication Code found!");
+					System.out.println("\tDuplicate:"+ "\t" + array[j].toString() + "\n\tMatches:" + "\t" + array[i].toString());
+					System.out.print("Please enter a new Publication Code for the duplicate: ");
 					boolean newCodeCheck = true;
 					while (newCodeCheck) {
 						long newCode = kb.nextLong();
-						for (int l = 0; l < array.length; l++) {
+								try {
+									
+									for (int l = 0; l < array.length; l++) {
+										if (array[l].getPublication_code() == newCode) {
+											throw new CopyCodeException();
+										} else {
+											array[j].setPublication_code(newCode);
+											newCodeCheck = false;
+										}
+									}
+								} catch (CopyCodeException e) {
+									e.getMessage();
+									//e.printStackTrace();
+								}
 							
 						}
-						array[j].setPublication_code(newCode);	
+							
 					}
 					
 				}
 			}
+		
+		PrintWriter output = new PrintWriter(outFile);
+		
+		for (int i = 0; i < array.length; i++)
+			output.println(array[i]);
+		
+		br.close();
+		output.close();
+		
 		}
-	}
-
-	}
-
+	
 	public static int numberOfItems(File Filename) throws IOException {
 		LineNumberReader reader = new LineNumberReader(new FileReader(Filename));
 		int cnt = 0;

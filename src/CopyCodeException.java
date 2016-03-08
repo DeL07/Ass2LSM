@@ -28,7 +28,7 @@ public class CopyCodeException extends Exception {
 	
 	@Override 
 	public String getMessage(){
-		return message;
+		return "New Publication Code matches a currently existing one\nPlease enter a new one";
 	}
 	
 	

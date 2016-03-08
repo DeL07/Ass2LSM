@@ -14,7 +14,7 @@ public class Publication {
 		publication_code = code;
 		publication_name = name;
 		publication_year = year;
-		publication_authorname = name;
+		publication_authorname = author;
 		publication_cost = cost;
 		publication_nbpages = pages;
 	}
@@ -65,6 +65,11 @@ public class Publication {
 
 	public void setPublication_nbpages(int publication_nbpages) {
 		this.publication_nbpages = publication_nbpages;
+	}
+
+	@Override
+	public String toString() {
+		return publication_code + " " + publication_name + " " + publication_year + " " + publication_authorname + " " + publication_cost + " " + publication_nbpages;
 	}
 	
 	
