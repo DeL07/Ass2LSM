@@ -149,33 +149,44 @@ public class PublicationListingProcess1 {
 		for (int i = 0; i < array.length; i++) {
 			long tempCheck;
 			tempCheck = array[i].getPublication_code();
-			for (int j = 0; j < array.length; j++) {
-				// Verifies object is not detecting itself and displays record
-				// which contains duplicate
-				if (array[j].getPublication_code() == tempCheck & j != i) {
-					System.out.println("\nError: Duplicate Publication Code found!");
-					System.out.println(
-							"\tDuplicate:" + "\t" + array[j].toString() + "\n\tMatches:" + "\t" + array[i].toString());
-					try {
-						System.out.print("Please enter a new Publication Code for the duplicate: ");
-						boolean loop = false;
-						while (loop == false) {
+			// Loop to ensure current array position doesn't change if wrong
+			// input is entered
+			while (true) {
+				for (int j = 0; j < array.length; j++) {
+					// Verifies object is not detecting itself and displays
+					// record
+					// which contains duplicate
+					if (array[j].getPublication_code() == tempCheck & j != i) {
+						System.out.println("\nError: Duplicate Publication Code found!");
+						System.out.println("\tDuplicate:" + "\t" + array[j].toString() + "\n\tMatches:" + "\t"
+								+ array[i].toString());
+						// Continuous loop for CopyCodeException
+						while (true) {
+							try {
+								System.out.print("Please enter a new Publication Code for the duplicate: ");
+								boolean loop = false;
+								while (loop == false) {
 
-							long newCode = kb.nextLong();
-							boolean newCodeCheck = duplicateCode(newCode);
-							if (newCodeCheck == false) {
-								throw new CopyCodeException("Error");
-							} else {
-								array[j].setPublication_code(newCode);
-								System.out.println("New Publication Code set");
-								loop = true;
+									long newCode = kb.nextLong();
+									boolean newCodeCheck = duplicateCode(newCode);
+									if (newCodeCheck == false) {
+										throw new CopyCodeException("\nError");
+									} else {
+										array[j].setPublication_code(newCode);
+										System.out.println("New Publication Code set");
+										loop = true;
+
+									}
+
+								}
+								break;
+							} catch (CopyCodeException e) {
+								e.printStackTrace();
 							}
-
 						}
-					} catch (CopyCodeException e) {
-						e.printStackTrace();
 					}
 				}
+				break;
 			}
 		}
 
@@ -208,7 +219,7 @@ public class PublicationListingProcess1 {
 				count++;
 			}
 		}
-		
+
 		if (count >= 1) {
 			return false;
 		} else {
